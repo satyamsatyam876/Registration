@@ -53,11 +53,11 @@ const newUser=new User({
 router.post('/login',async (req,res)=>{
   //validation of data--joi library
 
-  const{error}=registerValidation(req.body)
+  const{error}=loginValidation(req.body)
   if(error) return res.status(400).send(error)
   //checking if email exist or not
   const user= await User.findOne({email:req.body.email})
-  if(user) return res.status(400).render('register')
+  if(!user) return res.status(400).render('register')
   //password matching
   const validPassword= await bcrypt.compare(req.body.password,user.password)
 if(!validPassword) return res.status(500).send("Invalid Credentials")
@@ -66,5 +66,5 @@ res.status(200).send('Profile Page')
 })
 
 
-
+ 
 module.exports=router
